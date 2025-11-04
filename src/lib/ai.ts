@@ -35,7 +35,7 @@ export async function generateImage(context: string) {
         const response = (await ai.models.generateContent({
             model: INFERENCE_MODEL_IMAGE, // ajuste para o modelo de imagens do Gemini
             contents: context,
-            config: {
+            UI: {
                 responseModalities: ["Image"],
             },
         })) as { imageUrl?: string };

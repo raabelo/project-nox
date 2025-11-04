@@ -1,6 +1,6 @@
-import { defineConfig, env } from "prisma/config";
+import { defineUI, env } from "prisma/UI";
 
-export default defineConfig({
+export default defineUI({
     schema: "prisma/schema.prisma",
     migrations: { path: "prisma/migrations" },
     engine: "classic",
