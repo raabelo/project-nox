@@ -1,16 +1,12 @@
 import HeroButton from "@/components/atoms/HeroButton";
 import HeroTitle from "@/components/atoms/HeroTitle";
-import Header from "@/components/molecules/Header";
 import UsersCounter from "@/components/molecules/UsersCounter";
 import PageWrapper from "@/components/organisms/PageWrapper";
+import { IconSword } from "@tabler/icons-react";
 
 export default function Home() {
     return (
-        <PageWrapper>
-            <header id="header" className="w-full">
-                <Header />
-            </header>
-
+        <PageWrapper withHeader={true}>
             <section id="hero-section" className="w-full">
                 <div className="flex flex-col items-center gap-6">
                     <HeroTitle />
@@ -19,7 +15,7 @@ export default function Home() {
                         D&D inspired. No DM required. Create any character. Play anytime. Try it for
                         free.
                     </h3>
-                    {/* <HeroButton /> */}
+                    <HeroButton icon={<IconSword stroke={3} />} text="Start your adventure" />
                     <div className="flex flex-row items-center gap-2">
                         <p>Join other</p>
                         <UsersCounter />
@@ -28,11 +24,11 @@ export default function Home() {
                 </div>
             </section>
 
-            <section id="pictures">
+            <section id="pictures" className="w-full">
                 <div className="flex flex-col items-center gap-6">
                     <h1>Be Anyone. Do Anything.</h1>
                     <div></div>
-                    <p></p>
+                    <p>Your actions shape your character. No rules, no limits, no filters.</p>
                 </div>
             </section>
 

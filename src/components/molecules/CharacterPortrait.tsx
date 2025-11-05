@@ -18,7 +18,7 @@ export default function CharacterProtrait({ character }: CharacterPortraitProps)
         <div
             className="relative border-2 rounded-2xl w-20 p-1"
             style={{
-                borderColor: character.uiColor || UI.DEFAULT_COLOR,
+                borderColor: character.uiColor || UI.PRIMARY_COLOR,
             }}
         >
             <div className="size-2.5 absolute top-1 right-1 rounded-full bg-green-400" />

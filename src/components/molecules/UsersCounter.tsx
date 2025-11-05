@@ -8,7 +8,7 @@ interface UsersCounterProps {
     color?: string;
 }
 
-export default function UsersCounter({ color = UI.DEFAULT_COLOR }: UsersCounterProps) {
+export default function UsersCounter({ color = UI.PRIMARY_COLOR }: UsersCounterProps) {
     const { count, loading, error } = useCountUsers();
 
     return (

@@ -4,52 +4,72 @@ import { UI } from "@/utils/global/constants/ui.config";
 import Link from "next/link";
 import { useState } from "react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: React.ReactNode;
     text?: string;
     color?: string;
     href?: string;
+    target?: string;
+    textonly?: boolean;
     children?: React.ReactNode;
 }
 
 export default function Button({
     icon,
     text,
-    color = UI.DEFAULT_COLOR,
+    color = UI.PRIMARY_COLOR,
     href,
+    textonly,
+    target,
     children,
+    className = "",
     ...props
 }: ButtonProps) {
     const [isFocused, setIsFocused] = useState(false);
-
     const isLink = Boolean(href);
+
+    const sharedClasses = `relative p-2 text-sm text-center h-fit cursor-pointer ${
+        icon && !text ? "aspect-square" : "py-1.5 px-3"
+    } rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${textonly? "" : "border"} transition-all ${className}`;
+
+    const sharedStyle = {
+        borderColor: color,
+        color: color,
+    };
+
+    const overlay = (
+        <div
+            className={`absolute top-0 left-0 transition-all size-full ${
+                isFocused ? "opacity-20" : "opacity-10"
+            }`}
+            style={{ backgroundColor: color }}
+        />
+    );
+
+    const handleMouseEnter = () => setIsFocused(true);
+    const handleMouseLeave = () => setIsFocused(false);
+
+    const content = (
+        <>
+            {icon}
+            {text && <span>{text}</span>}
+            {children}
+            {!textonly && overlay}
+        </>
+    );
 
     if (isLink) {
         return (
             <Link
-                href={href as string}
                 {...(props as any)}
-                onMouseEnter={() => setIsFocused(true)}
-                onMouseLeave={() => setIsFocused(false)}
-                className={`relative p-2 h-fit cursor-pointer ${
-                    icon && !text ? "aspect-square" : "py-1.5 px-3"
-                } rounded-md flex flex-row items-center gap-2 border transition-all ${
-                    props.className
-                }`}
-                style={{
-                    borderColor: color,                    
-                    color: color,
-                }}
+                href={href as string}
+                target={target}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className={sharedClasses}
+                style={sharedStyle}
             >
-                <div
-                    className={`absolute top-0 left-0 transition-all size-full ${
-                        isFocused ? "opacity-20" : "opacity-10"
-                    }`}
-                    style={{ backgroundColor: color }}
-                />
-                {icon}
-                {text && <span className="text-sm">{text}</span>}
-                {children}
+                {content}
             </Link>
         );
     }
@@ -57,25 +77,12 @@ export default function Button({
     return (
         <button
             {...props}
-            onMouseEnter={() => setIsFocused(true)}
-            onMouseLeave={() => setIsFocused(false)}
-            className={`relative p-2 h-fit cursor-pointer ${
-                icon && !text ? "aspect-square" : "py-1.5 px-3"
-            } rounded-md flex flex-row items-center gap-2 border transition-all ${props.className}`}
-            style={{
-                borderColor: color,
-                color: color,
-            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className={sharedClasses}
+            style={sharedStyle}
         >
-            <div
-                className={`absolute top-0 left-0 transition-all size-full ${
-                    isFocused ? "opacity-20" : "opacity-10"
-                }`}
-                style={{ backgroundColor: color }}
-            />
-            {icon}
-            {text && <span className="text-sm">{text}</span>}
-            {children}
+            {content}
         </button>
     );
 }

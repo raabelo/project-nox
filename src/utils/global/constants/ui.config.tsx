@@ -1,3 +1,4 @@
 export const UI = {
-    DEFAULT_COLOR: "#ff5733",
+    PRIMARY_COLOR: "var(--color-primary)",
+    SECONDARY_COLOR: "var(--color-secondary)",
 };
