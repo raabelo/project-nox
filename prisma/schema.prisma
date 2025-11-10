@@ -21,14 +21,25 @@ enum LoreObjectType {
   PLAYER_CHARACTER
 }
 
+enum AddonType {
+  CORE
+  RULES
+  PROMPT
+  NARRATIVE
+  INTEGRATION
+  UTILITY
+}
+
 model User {
   id String @id @default(cuid())
 
-  email    String @unique
+  email    String  @unique
   password String
-  nickname String @unique
+  nickname String  @unique
+  avatar   String?
 
   characters PlayerCharacter[]
+  addons     Addon[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -37,16 +48,20 @@ model User {
 model Game {
   id String @id @default(cuid())
 
-  title       String
-  description String?
-  background  String?
-  // sortTermSummary String?
-  // longTermSummary String?
+  title            String
+  thumbnail        String?
+  description      String?
+  backgroundStory  String?
+  shortTermSummary String?
+  longTermSummary  String?
+  isPrivate        Boolean? @default(false)
 
   characters  PlayerCharacter[]
   memories    Memory[]
   loreObjects LoreObject[]
-  dialogues   DialogueMessage[]
+  dialogs     DialogMessage[]
+
+  addons Addon[]
 
   summaryUpdatedAt DateTime @default(now())
 
@@ -59,14 +74,15 @@ model PlayerCharacter {
 
   name    String
   uiColor String?
+  picture String?
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
   game   Game   @relation(fields: [gameId], references: [id])
   gameId String
 
-  memories  Memory[]
-  dialogues DialogueMessage[]
+  memories Memory[]
+  dialogs  DialogMessage[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -95,6 +111,7 @@ model LoreObject {
   type        LoreObjectType
   name        String
   description String?
+  picture     String?
 
   game   Game   @relation(fields: [gameId], references: [id])
   gameId String
@@ -105,7 +122,7 @@ model LoreObject {
   updatedAt DateTime? @updatedAt
 }
 
-model DialogueMessage {
+model DialogMessage {
   id String @id @default(cuid())
 
   message   String
@@ -121,17 +138,24 @@ model DialogueMessage {
   updatedAt DateTime? @updatedAt
 }
 
-// model Addon {
-//   id String @id @default(cuid())
+model Addon {
+  id String @id @default(cuid())
 
-//   name        String
-//   slug        String  @unique
-//   version     String
-//   author      String?
-//   description String?
-//   repository  String?
-//   enabled     Boolean @default(false)
+  repositoryUrl String
+  slug          String?      @unique
+  name          String?
+  version       String?
+  description   String?
+  thumbnail     String?
+  tags          String[]
+  types         AddonType[]
+  verified      Boolean     @default(false)
 
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime? @updatedAt
-// }
+  games Game[]
+
+  author   User   @relation(fields: [authorid], references: [id])
+  authorid String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}

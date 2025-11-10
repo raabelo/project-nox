@@ -1,82 +1,67 @@
 import useAuthSignUp from "@/hooks/useAuthSignUp";
-import Button from "../atoms/Button";
-import { useFormFields } from "@/hooks/useFormFields";
-import { FormEvent } from "react";
+import AuthForm from "../molecules/AuthForm";
 
 interface SignUpFormProps {
     isActive: boolean;
-    toggleActive: (method: "up") => void;
+    toggleActive: (method: "in" | "up") => void;
 }
 
-export default function SignUpForm({ isActive, toggleActive }: SignUpFormProps) {
-    const formPrefix = "signupform";
+const toggleActiveMethod = "up";
 
-    const { fields, formData } = useFormFields(formPrefix, [
+export default function SignUpForm({ isActive, toggleActive }: SignUpFormProps) {
+    const { signUp, isLoading } = useAuthSignUp();
+
+    const fields = [
         {
             name: "nickname",
             label: "Nickname",
             type: "text",
             placeholder: "John Doe",
+            required: true,
         },
         {
             name: "email",
             label: "Email address",
             type: "email",
             placeholder: "example@email.com",
+            required: true,
         },
         {
             name: "password",
             label: "Password",
             type: "password",
             placeholder: "Your password",
+            required: true,
         },
         {
             name: "confirm-password",
             label: "Confirm password",
             type: "password",
             placeholder: "Repeat your password",
+            required: true,
         },
-    ]);
+    ];
 
-    const { signUp, isLoading } = useAuthSignUp();
-
-    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        try {
-            await signUp({
-                nickname: formData.nickname,
-                email: formData.email,
-                password: formData.password,
-            });
-
-            // opcional: feedback visual ou reset do formulário
-            console.log("✅ Registered successfully");
-        } catch (err) {
-            console.error("❌ Registration failed:", err);
-        }
+    async function handleSubmit(formData: Record<string, string>) {
+        await signUp({
+            nickname: formData.nickname,
+            email: formData.email,
+            password: formData.password,
+        });
     }
 
     return (
-        <form
+        <AuthForm
+            isActive={isActive}
+            toggleActive={toggleActive}
+            method={toggleActiveMethod}
+            formPrefix="signupform"
+            title="Sign Up"
+            fieldsConfig={fields}
             onSubmit={handleSubmit}
-            className={`flex flex-col gap-4 px-10 py-12 pb-14 rounded-xl transition-all ${
-                isActive ? "bg-background-light" : "aspect-square size-60"
-            }`}
-            onClick={() => toggleActive("up")}
-        >
-            <h2 className="text-xl font-semibold mb-2 text-center">Sign Up</h2>
-
-            <div className="flex flex-col gap-5">{fields}</div>
-
-            <div className="flex flex-col gap-3 mt-4">
-                <Button
-                    type="submit"
-                    text={isLoading ? "Registering..." : "Register"}
-                    disabled={isLoading}
-                    className="text-foreground! bg-linear-to-r from-primary to-secondary"
-                />
-            </div>
-        </form>
+            submitLabel="Register"
+            loadingLabel="Registering..."
+            isLoading={isLoading}
+        />
     );
 }

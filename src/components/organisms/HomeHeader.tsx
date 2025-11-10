@@ -3,9 +3,9 @@ import Button from "../atoms/Button";
 import { APP } from "@/utils/global/constants/app.config";
 import { UI } from "@/utils/global/constants/ui.config";
 
-export default function Header() {
+export default function HomeHeader() {
     return (
-        <div className="flex flex-row justify-between p-4 w-full items-center">
+        <div className="flex flex-row justify-between w-full items-center">
             <div className="flex flex-row gap-2 items-center">
                 <Button icon={<IconBrandGithub />} href={APP.REPOSITORY_URL} target="_blank" />
             </div>

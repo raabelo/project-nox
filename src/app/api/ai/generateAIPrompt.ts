@@ -4,7 +4,7 @@ type GenerateAIPrompt = {
     playerInput: string;
 };
 
-export default function generateAIPrompt(data: GenerateAIPrompt): string {
+export default function generateAIPrompt(memorySeparator: string, data: GenerateAIPrompt): string {
     const { historyText, memoryContext, playerInput } = data;
 
     return `
@@ -29,6 +29,6 @@ export default function generateAIPrompt(data: GenerateAIPrompt): string {
       { "name": "nome resumido do acontecimento", "content": "detalhes completos" }
     ]
     
-    Separe a narrativa da parte JSON usando o marcador: "---MEMORY---".
+    Separe a narrativa da parte JSON usando o marcador: "${memorySeparator}".
     `;
 }

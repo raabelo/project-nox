@@ -1,50 +1,60 @@
-import { useFormFields } from "@/hooks/useFormFields";
-import Button from "../atoms/Button";
-import Input from "../atoms/Input";
+import useAuthSignIn from "@/hooks/useAuthSignIn";
+import AuthForm from "../molecules/AuthForm";
+import { useRouter } from "next/navigation";
 
 interface SignInFormProps {
     isActive: boolean;
-    toggleActive: (method: "in") => void;
+    toggleActive: (method: "in" | "up") => void;
 }
 
+const toggleActiveMethod = "in";
+
 export default function SignInForm({ isActive, toggleActive }: SignInFormProps) {
-    const { fields } = useFormFields("signinform", [
+    const router = useRouter()
+    const { signIn, isLoading } = useAuthSignIn();
+
+    const fields = [
         {
-            name: "email",
+            name: "identifier",
             label: "Email address or nickname",
-            type: "email",
-            placeholder: "Email",
+            type: "text",
+            placeholder: "Email or nickname",
+            required: true,
         },
         {
             name: "password",
             label: "Password",
             type: "password",
             placeholder: "Password",
+            required: true,
         },
-    ]);
+    ];
+
+    async function handleSubmit(formData: Record<string, string>) {
+        await signIn({
+            identifier: formData.identifier,
+            password: formData.password,
+        }).then(res => {
+            router.push("/inn")
+        });
+    }
 
     return (
-        <form
-            className={`flex flex-col gap-4 px-10 py-12 pb-14 rounded-xl transition-all ${
-                isActive ? "bg-background-light" : "aspect-square size-60"
-            }`}
-            onClick={() => toggleActive("in")}
-        >
-            <h2 className="text-xl font-semibold mb-2 text-center">Sign In</h2>
-            <div className="flex flex-col gap-5">{fields}</div>
-            <div className="flex flex-col gap-3 mt-4">
-                <Button
-                    type="submit"
-                    text="Login"
-                    className="text-foreground! bg-linear-to-r from-primary to-secondary"
-                />
-                <Button
-                    textonly
-                    type="submit"
-                    text="Forgot my password"
-                    className="text-foreground! text-xs!"
-                />
-            </div>
-        </form>
+        <AuthForm
+            isActive={isActive}
+            toggleActive={toggleActive}
+            method={toggleActiveMethod}
+            formPrefix="signinform"
+            title="Sign In"
+            fieldsConfig={fields}
+            onSubmit={handleSubmit}
+            submitLabel="Login"
+            loadingLabel="Logging in..."
+            isLoading={isLoading}
+            secondaryAction={{
+                label: "Forgot my password",
+                onClick: () => console.log("Forgot password clicked"),
+            }}
+        />
     );
 }

@@ -15,10 +15,10 @@ export async function POST(req: Request) {
         if (!gameId || !characterId || !playerInput) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
         }
-
+        
         // 1️⃣ Histórico da sessão
         const history = (
-            await prisma.dialogueMessage.findMany({
+            await prisma.dialogMessage.findMany({
                 where: { gameId },
                 orderBy: { createdAt: "desc" },
                 take: DIALOGUE_DEPTH,
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         const memoryContext = relevant.map((m) => `- "${m.name}": ${m.content}`).join("\n");
 
         // 3️⃣ Prompt para a IA
-        const prompt = generateAIPrompt({
+        const prompt = generateAIPrompt(MEMORY_SEPARATOR, {
             historyText,
             memoryContext,
             playerInput,
@@ -44,12 +44,9 @@ export async function POST(req: Request) {
         const iaResponse = await generateText(prompt);
 
         // 5️⃣ Salva no histórico do jogo
-        await prisma.dialogueMessage.create({
+        await prisma.dialogMessage.create({
             data: { gameId, characterId, message: playerInput, role: "PLAYER_CHARACTER" },
-        });
-        await prisma.dialogueMessage.create({
-            data: { gameId, characterId, message: iaResponse, role: "DUNGEON_MASTER" },
-        });
+        });       
 
         console.log("IA Response:", iaResponse);
 
@@ -78,8 +75,11 @@ export async function POST(req: Request) {
             }
         }
 
-        // 8️⃣ Retorna narrativa pro jogador
-        return NextResponse.json({ text: narrative });
+        const aiResponse = await prisma.dialogMessage.create({
+            data: { gameId, characterId, message: narrative, role: "DUNGEON_MASTER" },
+        });
+
+        return NextResponse.json(aiResponse);
     } catch (err) {
         console.error("Erro no endpoint IA:", err);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

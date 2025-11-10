@@ -8,6 +8,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     name: string;
     icon?: React.ReactNode;
     color?: string;
+    error?: string;
 }
 
 export default function Input({
@@ -16,11 +17,11 @@ export default function Input({
     color = UI.PRIMARY_COLOR,
     id,
     name,
+    error,
     ...props
 }: InputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [inputId, setInputId] = useState(id || "");
-
     const [isFocused, setIsFocused] = useState(false);
     const [formStyle, setFormStyle] = useState<CSSStyleDeclaration | null>(null);
 
@@ -33,14 +34,15 @@ export default function Input({
         if (inputRef.current?.form) {
             const form = inputRef.current.form;
             const style = getComputedStyle(form);
-            console.log(style.backgroundColor);
             setFormStyle(style);
         }
     }, [id, label]);
 
+    const borderColor = error ? UI.FAILURE_COLOR : color;
+
     return (
-        <div className="size-fit flex flex-col gap-1 relative">
-            <div className="flex-row gap-2 relative">
+        <div className="size-fit flex flex-col gap-1 relative w-full">
+            <div className="flex-row gap-2 relative w-full">
                 <input
                     {...props}
                     ref={inputRef}
@@ -49,11 +51,9 @@ export default function Input({
                     onBlur={() => setIsFocused(false)}
                     placeholder=""
                     id={inputId}
-                    className={`rounded-full border py-2 px-4 text-foreground ${
-                        icon ? "pl-8" : ""
-                    }`}
+                    className={`rounded-full border py-2 px-4 text-foreground w-full transition-colors ${props.className}`}
                     style={{
-                        borderColor: color,
+                        borderColor,
                         caretColor: color,
                     }}
                 />
@@ -61,7 +61,7 @@ export default function Input({
             <label
                 htmlFor={inputId}
                 className={`font-light absolute cursor-text transition-all select-none ${
-                    isFocused
+                    isFocused || props.value
                         ? "-top-2 left-3 text-xs px-1.5 text-foreground"
                         : "left-4 top-1/2 -translate-y-1/2 text-sm text-foreground/50"
                 }`}
@@ -69,8 +69,21 @@ export default function Input({
                     backgroundColor: formStyle?.backgroundColor,
                 }}
             >
-                {icon} {label}
+                {icon} {label}{" "}
+                {!props.required && (
+                    <span
+                        className={`opacity-50 transition-all ${
+                            isFocused || props.value ? "text-[0.60rem]" : "text-[0.75rem]"
+                        }`}
+                    >
+                        {" (optional) "}
+                    </span>
+                )}
             </label>
+
+            {error && (
+                <span className="text-xs text-failure absolute -bottom-4 left-4">{error}</span>
+            )}
         </div>
     );
 }

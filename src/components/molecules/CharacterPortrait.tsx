@@ -21,7 +21,7 @@ export default function CharacterProtrait({ character }: CharacterPortraitProps)
                 borderColor: character.uiColor || UI.PRIMARY_COLOR,
             }}
         >
-            <div className="size-2.5 absolute top-1 right-1 rounded-full bg-green-400" />
+            <div className="size-2.5 absolute top-1 right-1 rounded-full bg-success" />
             <Image
                 alt={`${character.name}-portrait`}
                 src={PLACEHOLDER_IMAGE_URL}
@@ -29,7 +29,9 @@ export default function CharacterProtrait({ character }: CharacterPortraitProps)
                 height={1080}
                 className="aspect-square object-cover object-top w-full rounded-xl"
             />
-            <div>{character.name}</div>
+            <div>
+                <span className="text-xs">{character.name}</span>
+            </div>
         </div>
     );
 }

@@ -9,9 +9,9 @@ const JWT_DURATION = "7d"; // 7 dias
 
 export async function POST(req: Request) {
     try {
-        const { email, nickname, password } = await req.json();
+        const { identifier, password } = await req.json();
 
-        if ((!email && !nickname) || !password) {
+        if (!identifier || !password) {
             return NextResponse.json(
                 { error: "Email or nickname and password are required" },
                 { status: 400 }
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         }
 
         const user = await prisma.user.findFirst({
-            where: { OR: [{ email }, { nickname }] },
+            where: { OR: [{ email: identifier }, { nickname: identifier }] },
         });
 
         if (!user) {

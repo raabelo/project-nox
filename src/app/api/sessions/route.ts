@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const gameId = url.searchParams.get("gameId");
   if (!gameId) return NextResponse.json({ error: "gameId required" }, { status: 400 });
 
-  const messages = await prisma.dialogueMessage.findMany({
+  const messages = await prisma.dialogMessage.findMany({
     where: { gameId },
     orderBy: { createdAt: "asc" },
   });
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
-  const record = await prisma.dialogueMessage.create({
+  const record = await prisma.dialogMessage.create({
     data: { gameId, characterId, message, role },
   });
 

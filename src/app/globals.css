@@ -1,33 +1,67 @@
 @import "tailwindcss";
 
 :root {
-  --foreground: #F7EFF8;
-  --background: #25262A;
+    --sb-size: 8px;
+    --sb-border-radius: 32px;
 }
 
 * {
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-  outline: none;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    outline: none;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  
-  --color-foreground: #F7EFF8;
-  --color-background: #25262A;
-  --color-background-light: #303136;
-  --color-primary: #5E458F;
-  --color-secondary: #BD83C0;
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 
-  --gradient-primary: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    --color-foreground: #f7eff8;
+    --color-background: #25262a;
+    --color-background-light: #303136;
+    --color-primary: #5e458f;
+    --color-secondary: #bd83c0;
+
+    --color-success: #27F24F;
+    --color-failure: #f22744;
+    --color-warning: #F2C027;
+
+    --gradient-primary: linear-gradient(to right, var(--color-primary), var(--color-secondary));
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+*::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--color-background-light);
+    border-radius: var(--sb-border-radius);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: var(--sb-border-radius);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    * {
+        scrollbar-color: var(--color-primary) var(--color-background-light);
+        scrollbar-width: thin;
+    }
+}
+
+button {
+    cursor: pointer;
 }

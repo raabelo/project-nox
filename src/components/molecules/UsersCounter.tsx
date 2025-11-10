@@ -13,10 +13,9 @@ export default function UsersCounter({ color = UI.PRIMARY_COLOR }: UsersCounterP
 
     return (
         <div
-            className={`relative py-1 px-2 h-fit w-auto rounded-md flex flex-row items-center gap-2 border transition-all`}
+            className={`relative py-1 px-2 h-fit w-auto rounded-md flex flex-row items-center gap-2 border transition-all text-foreground`}
             style={{
                 borderColor: color,
-                color: color,
                 minWidth: "1.5rem",
             }}
         >

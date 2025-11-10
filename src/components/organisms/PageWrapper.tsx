@@ -1,17 +1,18 @@
-import Header from "./Header";
+import { useModal } from "@/contexts/ModalContext";
+import ModalContainer from "./ModalContainer";
 
 interface PageWrapperProps {
     isFullscreen?: boolean;
-    withHeader?: boolean;
+    header?: React.ReactNode;
     children: React.ReactNode;
 }
 
-export default function PageWrapper({ children, withHeader, isFullscreen }: PageWrapperProps) {
+export default function PageWrapper({ children, header, isFullscreen }: PageWrapperProps) {
     return (
-        <div className="flex flex-col min-h-screen items-center justify-center font-sans bg-background">
-            {withHeader && (
+        <div className="flex flex-col min-h-screen items-center justify-center font-sans bg-background relative">
+            {header && (
                 <header id="header" className="w-full p-4">
-                    <Header />
+                    {header}
                 </header>
             )}
             <main
@@ -21,6 +22,7 @@ export default function PageWrapper({ children, withHeader, isFullscreen }: Page
             >
                 {children}
             </main>
+            <ModalContainer />
         </div>
     );
 }

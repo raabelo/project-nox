@@ -1,6 +1,7 @@
 "use client";
 
 import { UI } from "@/utils/global/constants/ui.config";
+import { IconLoader2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -12,6 +13,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     target?: string;
     textonly?: boolean;
     children?: React.ReactNode;
+    isLoading?: boolean;
 }
 
 export default function Button({
@@ -23,14 +25,19 @@ export default function Button({
     target,
     children,
     className = "",
+    isLoading = false,
     ...props
 }: ButtonProps) {
     const [isFocused, setIsFocused] = useState(false);
     const isLink = Boolean(href);
 
-    const sharedClasses = `relative p-2 text-sm text-center h-fit cursor-pointer ${
+    const sharedClasses = `relative p-2 ${
+        icon ? "pl-1.5" : ""
+    } text-sm text-center h-fit cursor-pointer ${
         icon && !text ? "aspect-square" : "py-1.5 px-3"
-    } rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${textonly? "" : "border"} transition-all ${className}`;
+    } rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${
+        textonly ? "" : "border"
+    } transition-all ${className}`;
 
     const sharedStyle = {
         borderColor: color,
@@ -51,10 +58,16 @@ export default function Button({
 
     const content = (
         <>
-            {icon}
-            {text && <span>{text}</span>}
-            {children}
-            {!textonly && overlay}
+            {!isLoading ? (
+                <>
+                    {icon}
+                    {text && <span>{text}</span>}
+                    {children}
+                    {!textonly && overlay}
+                </>
+            ) : (
+                <IconLoader2 className="animate-spin" />
+            )}
         </>
     );
 
