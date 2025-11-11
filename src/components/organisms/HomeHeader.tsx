@@ -11,7 +11,7 @@ export default function HomeHeader() {
             </div>
             <div className="flex flex-row gap-2 items-center">
                 <Button icon={<IconCoinFilled size={20} />} text={"Pricing"} color={UI.SECONDARY_COLOR} />
-                <Button text={"Sign In"} href="/inn/auth" />
+                <Button text={"Sign In"} href="/auth" />
             </div>
         </div>
     );

@@ -5,17 +5,6 @@ export interface LoginPayload {
     password: string;
 }
 
-export interface LoginResponse {
-    ok: boolean;
-    message?: string;
-    error?: string;
-}
-
-export async function loginUser(payload: LoginPayload): Promise<LoginResponse> {
-    const { data } = await api.post<LoginResponse>("/auth/login", payload);
-    return data;
-}
-
 export interface RegisterPayload {
     nickname: string;
     email: string;

@@ -50,24 +50,6 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Session {
-  id String @id @default(cuid())
-
-  sessionToken String   @unique
-  expires      DateTime
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model User {
   id String @id @default(cuid())
 
@@ -80,7 +62,6 @@ model User {
   addons     Addon[]
 
   accounts Account[]
-  sessions Session[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

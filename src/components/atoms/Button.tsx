@@ -32,8 +32,8 @@ export default function Button({
     const isLink = Boolean(href);
 
     const sharedClasses = `relative p-2 text-sm text-center h-fit cursor-pointer ${
-        icon && !text ? "aspect-square" : "py-1.5 px-3 pl-1.5"
-    } rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${
+        icon && !text ? "aspect-square" : "py-1.5 px-3"
+    } ${icon && text? "pl-2" : ""} rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${
         textonly ? "" : "border"
     } transition-all ${className}`;
 
