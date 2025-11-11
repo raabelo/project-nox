@@ -24,8 +24,6 @@ export default function EditableText({ initialValue, fontSize = 16, ...props }: 
         }
     }, [value, textRef]);
 
-    console.log(height);
-
     return (
         <div className="flex flex-row gap-2 w-full">
             {isEditing ? (

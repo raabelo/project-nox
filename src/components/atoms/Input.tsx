@@ -7,12 +7,14 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     label: string;
     name: string;
     icon?: React.ReactNode;
+    after?: React.ReactNode;
     color?: string;
     error?: string;
 }
 
 export default function Input({
     icon,
+    after,
     label,
     color = UI.PRIMARY_COLOR,
     id,
@@ -21,7 +23,7 @@ export default function Input({
     ...props
 }: InputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [inputId, setInputId] = useState(id || "");
+    const [inputId, setInputId] = useState(id || name || "");
     const [isFocused, setIsFocused] = useState(false);
     const [formStyle, setFormStyle] = useState<CSSStyleDeclaration | null>(null);
 
@@ -42,7 +44,12 @@ export default function Input({
 
     return (
         <div className="size-fit flex flex-col gap-1 relative w-full">
-            <div className="flex-row gap-2 relative w-full">
+            <div
+                className={`flex-row gap-2 relative w-full flex items-center justify-between rounded-full border py-2 px-4 text-foreground transition-colors ${props.className}`}
+                style={{
+                    borderColor,
+                }}
+            >
                 <input
                     {...props}
                     ref={inputRef}
@@ -51,16 +58,16 @@ export default function Input({
                     onBlur={() => setIsFocused(false)}
                     placeholder=""
                     id={inputId}
-                    className={`rounded-full border py-2 px-4 text-foreground w-full transition-colors ${props.className}`}
+                    className={""}
                     style={{
-                        borderColor,
                         caretColor: color,
                     }}
                 />
+                {after}
             </div>
             <label
                 htmlFor={inputId}
-                className={`font-light absolute cursor-text transition-all select-none ${
+                className={`font-light flex flex-row items-center gap-2 absolute cursor-text transition-all select-none ${
                     isFocused || props.value
                         ? "-top-2 left-3 text-xs px-1.5 text-foreground"
                         : "left-4 top-1/2 -translate-y-1/2 text-sm text-foreground/50"

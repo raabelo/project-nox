@@ -47,14 +47,9 @@ export async function POST(req: Request) {
         await prisma.dialogMessage.create({
             data: { gameId, characterId, message: playerInput, role: "PLAYER_CHARACTER" },
         });       
-
-        console.log("IA Response:", iaResponse);
-
+        
         // 6️⃣ Separa narrativa e memórias
         const [narrative, memoryJson] = iaResponse.split(MEMORY_SEPARATOR).map((s) => s.trim());
-
-        console.log("Narrative:", narrative);
-        console.log("Memory JSON:", memoryJson);
 
         // 7️⃣ Limpa e processa memórias
         if (memoryJson) {

@@ -80,7 +80,7 @@ export default function AuthForm({
                     type="button"
                     className="size-60 aspect-square p-2"
                     onClick={() => toggleActive(method)}
-                ></button>
+                />
             )}
         </form>
     );

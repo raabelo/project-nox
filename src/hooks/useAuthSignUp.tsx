@@ -1,12 +1,14 @@
-import { AuthResponse, RegisterPayload, registerUser } from "@/services/auth.service";
+"use client";
+
 import { useState, useCallback, useRef, useEffect } from "react";
+import { signIn } from "next-auth/react";
+import { registerUser, RegisterPayload } from "@/services/auth.service";
 
 export default function useAuthSignUp() {
-    const [data, setData] = useState<AuthResponse | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
-
     const mountedRef = useRef(true);
+
     useEffect(() => {
         mountedRef.current = true;
         return () => {
@@ -14,12 +16,21 @@ export default function useAuthSignUp() {
         };
     }, []);
 
-    const signUp = useCallback(async (payload: RegisterPayload): Promise<AuthResponse> => {
+    const signUp = useCallback(async (payload: RegisterPayload) => {
         setIsLoading(true);
         setError(null);
+
         try {
             const result = await registerUser(payload);
-            if (mountedRef.current) setData(result);
+
+            if (!result.token || !result.user.id) throw new Error("Registration failed");
+
+            await signIn("credentials", {
+                redirect: false,
+                identifier: payload.email,
+                password: payload.password,
+            });
+
             return result;
         } catch (err) {
             const e = err instanceof Error ? err : new Error(String(err));
@@ -30,5 +41,5 @@ export default function useAuthSignUp() {
         }
     }, []);
 
-    return { signUp, data, isLoading, error } as const;
+    return { signUp, isLoading, error } as const;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { UI } from "@/utils/global/constants/ui.config";
-import { IconLoader2 } from "@tabler/icons-react";
+import {  IconLoader2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -31,10 +31,8 @@ export default function Button({
     const [isFocused, setIsFocused] = useState(false);
     const isLink = Boolean(href);
 
-    const sharedClasses = `relative p-2 ${
-        icon ? "pl-1.5" : ""
-    } text-sm text-center h-fit cursor-pointer ${
-        icon && !text ? "aspect-square" : "py-1.5 px-3"
+    const sharedClasses = `relative p-2 text-sm text-center h-fit cursor-pointer ${
+        icon && !text ? "aspect-square" : "py-1.5 px-3 pl-1.5"
     } rounded-full overflow-hidden flex flex-row justify-center items-center gap-2 ${
         textonly ? "" : "border"
     } transition-all ${className}`;

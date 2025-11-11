@@ -10,17 +10,13 @@ const INFERENCE_MODEL_IMAGE = "gemini-2.0-flash";
 const IMAGE_PLACEHOLDER_URL = "https://via.placeholder.com/300x200.png?text=Mapa+RPG";
 
 export async function generateText(context: string) {
-    try {
-        console.log("Gerando texto com Gemini, prompt:", context);
-        
+    try {        
         const prompt = `${context}`;
 
         const response = await ai.models.generateContent({
             model: INFERENCE_MODEL_TEXT,
             contents: prompt,
         });
-
-        console.log("Resposta do Gemini:", response.text);
 
         return response.text ?? "O mestre não respondeu.";
     } catch (err) {

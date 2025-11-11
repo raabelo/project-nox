@@ -66,6 +66,7 @@ export function useFormFields(prefix: string, fieldsConfig: InputProps[]): UseFo
                 required={field.required}
                 className={`border rounded p-2 ${field.className ?? ""}`}
                 icon={field.icon}
+                after={field.after}
                 color={field.color}
                 value={formData[field.name] ?? ""}
                 onChange={handleChange}

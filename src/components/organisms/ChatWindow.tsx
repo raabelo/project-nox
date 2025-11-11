@@ -36,7 +36,7 @@ export default function ChatWindow({ gameId }: ChatWindowProps) {
       });
 
       if (aiResponse) {
-        console.log(aiResponse)
+        console.log("TODO: ", aiResponse)
       }
 
       setInput("");
