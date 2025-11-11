@@ -5,6 +5,7 @@ import { ModalProvider } from "@/contexts/ModalContext";
 import { Toaster } from "react-hot-toast";
 import { QueryProvider } from "@/contexts/QueryProvider";
 import { NextAuthProvider } from "@/contexts/NextAuthProvider";
+import { SessionUserProvider } from "@/contexts/SessionUserContext";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -31,10 +32,12 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <NextAuthProvider>
                     <QueryProvider>
-                        <ModalProvider>
-                            {children}
-                            <Toaster position="top-center" />
-                        </ModalProvider>
+                        <SessionUserProvider>
+                            <ModalProvider>
+                                {children}
+                                <Toaster position="top-center" />
+                            </ModalProvider>
+                        </SessionUserProvider>
                     </QueryProvider>
                 </NextAuthProvider>
             </body>

@@ -42,8 +42,18 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    callbacks: {
+        async jwt({ token }) {
+            const dbUser = await prisma.user.findUnique({ where: { email: token.email! } });
+            if (!dbUser) return {};
+
+            token.id = dbUser.id;
+            token.nickname = dbUser.nickname;
+            return token;
+        },
+    },
     pages: {
-        signIn: "/auth", // tua página personalizada
+        signIn: "/auth",
     },
 };
 

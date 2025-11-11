@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 export default function CreateAddonForm() {
     const [repo, setRepo] = useState("");
 
-    const { status, mutate } = useMutation({ mutationFn: postAddon });
+    const { mutate, isPending } = useMutation({ mutationKey: ["postAddon"], mutationFn: postAddon });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -39,7 +39,7 @@ export default function CreateAddonForm() {
                 text="Submit to approval"
                 color={UI.SECONDARY_COLOR}
                 className="mt-4 font-bold"
-                isLoading={status === "pending"}
+                isLoading={isPending}
             />
         </form>
     );

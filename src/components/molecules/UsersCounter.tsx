@@ -1,15 +1,16 @@
 "use client";
 
-import { useCountUsers } from "@/hooks/useCountUsers";
 import { UI } from "@/utils/global/constants/ui.config";
 import Spinner from "../atoms/Spinner";
+import { useQuery } from "@tanstack/react-query";
+import { getUsersCount } from "@/services/user.service";
 
 interface UsersCounterProps {
     color?: string;
 }
 
 export default function UsersCounter({ color = UI.PRIMARY_COLOR }: UsersCounterProps) {
-    const { count, loading, error } = useCountUsers();
+    const { data, isLoading } = useQuery({ queryKey: ["getUser"], queryFn: getUsersCount });
 
     return (
         <div
@@ -23,7 +24,7 @@ export default function UsersCounter({ color = UI.PRIMARY_COLOR }: UsersCounterP
                 className={`absolute top-0 left-0 transition-all size-full opacity-20`}
                 style={{ backgroundColor: color }}
             />
-            {loading ? <Spinner /> : count?.toLocaleString() ?? "0"}
+            {isLoading ? <Spinner /> : data?.count?.toLocaleString() ?? "0"}
         </div>
     );
 }
